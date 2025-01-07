@@ -14,13 +14,13 @@ from typing import List, Optional, Literal, Annotated, Dict
 
 
 # Import state and prompts
-from routers.Industry_Analyst.state import (
+from Industry_Analyst.state import (
 # from state import (
     ResearchState, ResearchStateInput, ResearchStateOutput,
     AnalystState, AnalystOutputState, ResearchPlan, Reflection,
     IndustryData
 )
-from routers.Industry_Analyst.prompts import (
+from Industry_Analyst.prompts import (
 # from prompts import (
     RESEARCH_PLAN_PROMPT, ANALYSIS_PROMPT, SUMMARY_PROMPT,
     REFLECTION_PROMPT, COMBINE_SUMMARIES_PROMPT
@@ -130,8 +130,8 @@ def research_planner(state: ResearchState):
     prompt = RESEARCH_PLAN_PROMPT.format(topic=state.topic)
     plan = planner.invoke([HumanMessage(content=prompt)])
     
-    # Limit the number of search queries to 3 to avoid halucination
-    limited_search_queries = plan.search_queries[:3]
+    # Limit the number of search queries to 5 to avoid halucination
+    limited_search_queries = plan.search_queries[:5]
     
     return {
         "plan": plan,
@@ -242,16 +242,26 @@ def aggregate_analyses(state: ResearchState) -> Dict:
     
     # Combine all analyses into a comprehensive industry data object
     combined_analysis = IndustryData(
-        news=[news for analysis in state.completed_analyses for news in analysis.news],
-        projections=[proj for analysis in state.completed_analyses for proj in analysis.projections],
-        risks=[risk for analysis in state.completed_analyses for risk in analysis.risks],
-        competitors=[comp for analysis in state.completed_analyses for comp in analysis.competitors]
+        # news=[news for analysis in state.completed_analyses for news in analysis.news],
+        # projections=[proj for analysis in state.completed_analyses for proj in analysis.projections],
+        # risks=[risk for analysis in state.completed_analyses for risk in analysis.risks],
+        # competitors=[comp for analysis in state.completed_analyses for comp in analysis.competitors]
+        overview = state.completed_analyses[-1].overview,
+        classification = state.completed_analyses[-1].classification,
+        metrics = state.completed_analyses[-1].metrics,
+        porters_forces = [force for analysis in state.completed_analyses for force in analysis.porters_forces],
+        trends = [trend for analysis in state.completed_analyses for trend in analysis.trends],
+        news = [news for analysis in state.completed_analyses for news in analysis.news],
+        projections = [proj for analysis in state.completed_analyses for proj in analysis.projections],
+        risks = [risk for analysis in state.completed_analyses for risk in analysis.risks],
+        competitors = [comp for analysis in state.completed_analyses for comp in analysis.competitors]
     )
     
     # Combine all summaries into a single coherent summary
     combined_summary = model.invoke([
         HumanMessage(content=COMBINE_SUMMARIES_PROMPT.format(
             summaries=' '.join(state.running_summaries),
+            combined_analysis=combined_analysis,
             topic=state.topic
         ))
     ]).content
@@ -274,7 +284,8 @@ def finalize_report(state: ResearchState):
     final_summary = state.running_summaries[-1] if state.running_summaries else "No analysis available"
     report = f"## Analysis Report\n\n{final_summary}\n\n### Sources:\n{formatted_sources}"
     
-    return {"final_report": report}
+    return {"final_report": report,
+            "completed_analyses": state.completed_analyses}
 
 # Parallel analyst_workflow 
 analyst_workflow = StateGraph(AnalystState, output=AnalystOutputState)

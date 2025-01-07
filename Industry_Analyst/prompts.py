@@ -1,49 +1,83 @@
-RESEARCH_PLAN_PROMPT = """Create a research plan for analyzing the {topic} industry."""
+RESEARCH_PLAN_PROMPT = """Create a comprehensive research plan for analyzing the {topic} industry. Focus on:
+1. Industry structure and market dynamics
+2. Competitive landscape and market shares
+3. Growth drivers and market trends
+4. Regulatory environment and barriers to entry
+5. Technology and innovation impact"""
 
-ANALYSIS_PROMPT = """Analyze this data for {query}:\n{formatted_results}"""
+ANALYSIS_PROMPT = """Analyze this industry data:
 
-SUMMARY_PROMPT = """Based on the existing summary and new findings, create or extend a comprehensive stock analysis.
-    
-Format the response in markdown with ~500 words total:
+{formatted_results}
+
+Focus your analysis on:
+1. Market structure and competitive dynamics
+2. Industry growth trends and drivers
+3. Key success factors and barriers to entry
+4. Regulatory and technological environment
+5. Future outlook and potential disruptions"""
+
+SUMMARY_PROMPT = """Based on the existing summary and new findings, create or extend a comprehensive industry analysis.
 
 Current Summary: {current_summary}
 New Findings: {analysis}
 
-Please structure the analysis using these sections and bullet points:
+Structure the analysis (~800 words) using these sections:
 
-# Market Position
-- Current market share and positioning
-- Key competitive advantages
-- Brand strength and recognition
+# Executive Summary
+- Industry overview and significance
+- Key findings and market dynamics
+- Overall industry outlook
 
-# Financial Performance
-- Revenue trends and growth rates
-- Profit margins and profitability metrics
-- Cash flow and balance sheet highlights
+# Industry Structure & Classification
+- Market definition and scope
+- Value chain analysis
+- Key industry segments
+- Industry classification (GICS/NAICS)
 
-# Growth Potential
-- Market expansion opportunities
-- New product/service developments
-- Strategic partnerships or acquisitions
+# Competitive Analysis
+- Market concentration and leadership
+- Entry barriers and success factors
+- Compare against the key players, their market shares and their strengths/weaknesses
+- Competitive advantages and strategies
+
+# Market Dynamics & Performance
+- Market size and growth trends
+- Demand drivers and growth catalysts
+- Pricing dynamics and profitability
+- Supply chain characteristics
+
+# Operating Environment
+- Regulatory framework and compliance
+- Technological landscape and innovation
+- Economic sensitivity and cycles
+- ESG considerations
+
+# Industry Trends & Disruption
+- Emerging market trends
+- Technological disruption
+- Changing consumer preferences
+- Innovation and R&D focus
 
 # Risk Assessment
 - Market-specific risks
-- Competitive threats
-- Regulatory challenges
+- Operational challenges
+- Regulatory threats
+- Macroeconomic factors
 
-# Industry Trends
-- Current market dynamics
-- Emerging technologies impact
-- Regulatory environment changes
+# Future Outlook
+- Growth projections and forecasts
+- Strategic opportunities
+- Potential challenges
+- Industry transformation
 
-# Investment Outlook
-- Short-term price targets
-- Long-term growth prospects
-- Key metrics to monitor
+Support each section with:
+- Specific data points and metrics where available
+- Recent market developments
+- Competitive insights
+- Forward-looking indicators
 
-Format each point as a concise bullet with supporting data when available.
-Focus on facts over speculation and cite specific numbers where possible.
-Leave out blank sections if data is not available."""
+Back up the analysis with numers and statistics to provide a solid foundation for the insights only when available.
+Focus on creating a clear narrative that integrates the new findings with existing knowledge."""
 
 REFLECTION_PROMPT = """Reflect on the research using this search query:
 {query}
@@ -52,5 +86,74 @@ Current Knowledge: {current_summary}
 
 If more research is needed for the same query, propose a refined query and set the sufficient to False (Limit the query length maximum to 10 words). Otherwise, confirm the query is sufficient by setting it to True."""
 
-COMBINE_SUMMARIES_PROMPT = """Combine these summaries into one coherent analysis:
-{summaries} for the {topic}."""
+COMBINE_SUMMARIES_PROMPT = """Synthesize these industry analyses into one comprehensive report:
+Summaries: {summaries}
+
+Combined_analysis: {combined_analysis}
+
+Create a detailed industry analysis (~1200 words) for the {topic} industry using these sections:
+
+# Executive Summary
+- Industry overview and significance
+- Key findings and market dynamics
+- Overall industry outlook
+
+# Industry Structure & Classification
+- Market definition and scope
+- Value chain analysis
+- Key industry segments
+- Industry classification (GICS/NAICS)
+
+# Competitive Analysis
+- Market concentration and leadership
+- Entry barriers and success factors
+- Compare against the key players, their market shares and their strengths/weaknesses
+- Competitive advantages and strategies
+
+# Market Dynamics & Performance
+- Market size and growth trends
+- Demand drivers and growth catalysts
+- Pricing dynamics and profitability
+- Supply chain characteristics
+
+# Operating Environment
+- Regulatory framework and compliance
+- Technological landscape and innovation
+- Economic sensitivity and cycles
+- ESG considerations
+
+# Industry Trends & Disruption
+- Emerging market trends
+- Technological disruption
+- Changing consumer preferences
+- Innovation and R&D focus
+
+# Risk Assessment
+- Market-specific risks
+- Operational challenges
+- Regulatory threats
+- Macroeconomic factors
+
+# Future Outlook
+- Growth projections and forecasts
+- Strategic opportunities
+- Potential challenges
+- Industry transformation
+
+Support each section with:
+- Specific data points and metrics
+- Market statistics and trends
+- Competitive insights
+- Forward-looking indicators
+
+Structure:
+- Use ## for section title (Markdown format)
+- Only use ONE structural element IF it helps clarify your point:
+  * Either a focused table comparing few key items (using Markdown table syntax)
+  * Or a short list (3-5 items) using proper Markdown list syntax:
+    - Use `*` or `-` for unordered lists
+    - Use `1.` for ordered lists
+    - Ensure proper indentation and spacing
+
+Back up the analysis with numers and statistics to provide a solid foundation for the insights only when available.
+Focus on creating a cohesive narrative that demonstrates deep understanding of industry dynamics and future direction."""

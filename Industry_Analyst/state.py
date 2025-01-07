@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Literal, Annotated, Dict
+from typing import List, Optional, Literal, Annotated, Dict, Union
 from typing_extensions import TypedDict
 from pydantic import BaseModel, Field
 import operator
@@ -35,8 +35,34 @@ class CompetitorItem(BaseModel):
     strengths: List[str] = Field(description="Key strengths", default=["No strengths"])
     weaknesses: List[str] = Field(description="Key weaknesses", default=["No weaknesses"])
 
+class IndustryMetrics(BaseModel):
+    """Industry performance metrics"""
+    market_size: str = Field(description="Total market size", default="Unknown")
+    growth_rate: str = Field(description="Industry growth rate", default="Unknown")
+    profit_margins: str = Field(description="Average industry margins", default="Unknown")
+    market_concentration: str = Field(description="Market concentration ratio", default="Unknown")
+
+class PorterForce(BaseModel):
+    """Structure for Porter's Five Forces analysis"""
+    force: str = Field(description="Name of the force", default="No force")
+    strength: Literal["Low", "Medium", "High", "Unknown"] = Field(description="Strength of the force", default="Unknown")
+    description: str = Field(description="Detailed analysis", default="No description")
+    key_factors: List[str] = Field(description="Key contributing factors", default=["No factors"])
+
+class MarketTrend(BaseModel):
+    """Structure for industry trends"""
+    name: str = Field(description="Name of the trend", default="No name")
+    impact: Literal["Positive", "Negative", "Neutral", "Unknown"] = Field(description="Impact on industry", default="Unknown")
+    description: str = Field(description="Trend description", default="No description")
+    timeframe: str = Field(description="Expected timeframe", default="No timeframe")
+
 class IndustryData(BaseModel):
     """Industry research data structure"""
+    overview: str = Field(description="Executive summary of the industry", default="")
+    classification: str = Field(description="Industry classification codes (GICS/NAICS)", default="")
+    metrics: IndustryMetrics = Field(description="Key industry metrics", default=IndustryMetrics())
+    porters_forces: List[PorterForce] = Field(description="Porter's Five Forces analysis", default=[])
+    trends: List[MarketTrend] = Field(description="Industry trends", default=[])
     news: List[NewsItem] = Field(description="Latest industry news", default=[])
     projections: List[ProjectionItem] = Field(description="Future industry projections", default=[])
     risks: List[RiskItem] = Field(description="Industry risks", default=[])
@@ -45,9 +71,20 @@ class IndustryData(BaseModel):
 class ResearchPlan(BaseModel):
     """Research planning structure"""
     focus_areas: List[str] = Field(description="Key areas to research")
-    search_queries: List[str] = Field(description=f"3 Search queries for data gathering including news, projections, risks, and competitors for {today}")
+    search_queries: List[str] = Field(
+        description=f"""5 Search queries for {today} covering:
+        - Industry structure, market size, and dynamics
+        - Competitive landscape and market shares
+        - Growth drivers and market trends
+        - Value chain and supply chain analysis
+        - Regulatory environment and compliance
+        - Technology trends and innovation
+        - Market risks and challenges
+        - ESG factors and sustainability
+        - Future outlook and forecasts"""
+    )
     analysis_points: List[str] = Field(description="Points to analyze")
-    
+
 class Reflection(BaseModel):
     """Reflection structure"""
     sufficient: bool = Field(description="Indicates if the current research is sufficient", default=False)
@@ -73,6 +110,7 @@ class ResearchStateInput(TypedDict):
 @dataclass(kw_only=True)
 class ResearchStateOutput(TypedDict):
     final_report: str = field(default=None)
+    completed_analyses: Annotated[List[IndustryData], operator.add] = field(default_factory=list)
 
 @dataclass(kw_only=True)
 class AnalystState:
