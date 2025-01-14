@@ -1,26 +1,54 @@
-# Industry Analysis AI Agents System
+# Stock Analysis Multi-Agent System
 
-An AI-powered system for conducting comprehensive industry analysis using LangGraph
+An AI-powered system using multiple specialized agents for comprehensive stock analysis through LangGraph.
 
 ## Project Overview
 
-This system performs automated industry research and analysis by:
-- Creating research plans with targeted search queries
-- Conducting parallel web searches using Tavily API
-- Analyzing industry data, risks, and trends
-- Generating comprehensive research reports
+This system employs a coordinated multi-agent approach to analyze stocks:
+
+### Orchestrator
+- Coordinates analysis workflow between specialized agents
+- Combines individual analyses into comprehensive reports
+- Manages research planning and execution
+
+### Specialized Agents
+1. **Economic Analyst**
+   - Analyzes macroeconomic conditions
+   - Evaluates monetary and fiscal policies
+   - Assesses economic risks and opportunities
+
+2. **Industry Analyst**
+   - Conducts industry research and competitive analysis
+   - Evaluates market trends and dynamics
+   - Analyzes regulatory environment
+
+3. **Quantitative Analyst**
+   - Performs financial metrics analysis
+   - Evaluates company performance
+   - Conducts valuation analysis
 
 ## Project Structure
 
 ```
 langgraph/
-├── .env                  # Environment variables
-├── README.md             # Project overview
-├── langgraph.json     # Langgraph configuration
+├── .env                       # Environment variables
+├── README.md                  # Project documentation
+├── Orchestrator/             
+│   ├── orchestrator.py        # Main coordination logic
+│   ├── state.py              # Orchestrator state definitions
+│   └── prompts.py            # Orchestrator system prompts
+├── Economic_Analyst/
+│   ├── economic_analyst.py    # Economic analysis workflow
+│   ├── state.py              # Economic analyst state
+│   └── prompts.py            # Economic analysis prompts
 ├── Industry_Analyst/     
-│   ├── research_parallel.py     # Main analysis workflow
-│   ├── state.py                 # State definitions
-│   └── prompts.py              # System prompts
+│   ├── research_parallel.py   # Industry analysis workflow
+│   ├── state.py              # Industry analyst state
+│   └── prompts.py            # Industry analysis prompts
+└── Quantitative_Analyst/
+    ├── quantitative_analyst.py # Financial analysis workflow
+    ├── state.py               # Quantitative analyst state
+    └── prompts.py             # Financial analysis prompts
 ```
 
 ## Environment Setup
@@ -33,7 +61,7 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 3. Install dependencies:
 ```bash
-pip install langchain langgraph tavily-python python-dotenv langchain-google-genai langsmith
+pip install langchain langgraph tavily-python python-dotenv langchain-google-genai langsmith quickfs-python
 ```
 
 ## Required Environment Variables
@@ -44,6 +72,7 @@ Create a `.env` file with the following variables:
 # AI Services
 GOOGLE_GENERATIVE_AI_API_KEY=  # Gemini API key
 TAVILY_API_KEY=                # Tavily search API key
+QUICKFS_API_KEY=               # QuickFS API key for financial data
 
 # LangSmith Configuration
 LANGCHAIN_TRACING_V2=true
@@ -55,22 +84,20 @@ LANGCHAIN_PROJECT=             # Your project name
 ## Usage
 
 ```python
-from Industry_Analyst.research_parallel import analyze_industry
+from Orchestrator.orchestrator import analyze_stock
 
 async def main():
-    result = await analyze_industry("Research Palantir Stock Industry")
+    result = await analyze_stock("AAPL")
     print(result["final_report"])
-
 ```
-Or use Langgraph Studio to run the analysis
-
 
 ## Features
 
-- **Parallel Research**: Conducts multiple research queries simultaneously
-- **Source Deduplication**: Eliminates duplicate sources and content
-- **Iterative Analysis**: Refines research based on initial findings, reAct agents with reflection
-- **Comprehensive Reporting**: Combines multiple analyses into coherent reports
+- **Multi-Agent Architecture**: Specialized agents for economic, industry, and quantitative analysis
+- **Parallel Processing**: Concurrent analysis execution for efficiency
+- **Source Deduplication**: Eliminates duplicate sources across all analyses
+- **Iterative Analysis**: Agents use reflection for research refinement
+- **Comprehensive Reporting**: Combines multiple expert analyses into cohesive reports
 
 ## License
 
@@ -84,4 +111,3 @@ Patrick Nguyen
 https://github.com/langchain-ai/report-mAIstro/tree/main
 https://github.com/langchain-ai/research-rabbit/tree/main/src/research_rabbit
 https://github.com/langchain-ai/data-enrichment/blob/main/src/enrichment_agent
-

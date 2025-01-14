@@ -72,7 +72,7 @@ class ResearchPlan(BaseModel):
     """Research planning structure"""
     focus_areas: List[str] = Field(description="Key areas to research")
     search_queries: List[str] = Field(
-        description=f"""5 Search queries for {today} covering:
+        description=f"""Create 3 search queries for {today} covering:
         - Industry structure, market size, and dynamics
         - Competitive landscape and market shares
         - Growth drivers and market trends
@@ -94,13 +94,11 @@ class Reflection(BaseModel):
 class ResearchState:
     topic: str = field(default=None)
     plan: Optional[ResearchPlan] = field(default=None)
-    search_query: str = field(default=None)
     search_queries: List[str] = field(default_factory=list)
     web_research_results: Annotated[list, operator.add] = field(default_factory=list)
     sources_gathered: Annotated[List[str], operator.add] = field(default_factory=list)
-    research_loop_count: int = field(default=0)
     running_summaries: Annotated[List[str], operator.add] = field(default_factory=list)
-    final_report: str = field(default=None)
+    final_industry_report: Annotated[List[str], operator.add] = field(default_factory=list)
     completed_analyses: Annotated[List[IndustryData], operator.add] = field(default_factory=list)
 
 @dataclass(kw_only=True)
@@ -109,7 +107,8 @@ class ResearchStateInput(TypedDict):
 
 @dataclass(kw_only=True)
 class ResearchStateOutput(TypedDict):
-    final_report: str = field(default=None)
+    # final_report: str = field(default=None)
+    final_industry_report: Annotated[List[str], operator.add] = field(default_factory=list)
     completed_analyses: Annotated[List[IndustryData], operator.add] = field(default_factory=list)
 
 @dataclass(kw_only=True)

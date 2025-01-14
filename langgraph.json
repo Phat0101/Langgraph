@@ -1,7 +1,7 @@
 {
   "dockerfile_lines": [],
   "graphs": {
-    "Research_Analyst": "./Industry_Analyst/research_parallel.py:graph"
+    "Research_Analyst": "./Orchestrator/main.py:graph"
   },
   "env": "./.env",
   "python_version": "3.11",

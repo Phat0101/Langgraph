@@ -154,6 +154,17 @@ Structure:
     - Use `*` or `-` for unordered lists
     - Use `1.` for ordered lists
     - Ensure proper indentation and spacing
+    
+Best Practices and Industry Standards:
+- Objectivity and Neutrality: Base your analysis on facts and evidence, avoiding personal biases.
+- Data-Driven Analysis: Support your claims with quantifiable data, using reliable and reputable sources.
+- Transparency: Clearly cite all data sources, assumptions, and methodologies.
+- Clarity and Conciseness: Present information in a clear, organized, and easy-to-understand format.
+- Forward-Looking Perspective: Consider future trends and their potential impact on the industry and the companies within it.
+- Use of Industry Frameworks: Apply well-established frameworks like Porter's Five Forces, SWOT Analysis, and PESTLE analysis.
+- Regular Updates: Update your analysis as new information becomes available.
+- Avoidance of Conflicts of Interest: Disclose any potential conflicts of interest.
+
 
 Back up the analysis with numers and statistics to provide a solid foundation for the insights only when available.
 Focus on creating a cohesive narrative that demonstrates deep understanding of industry dynamics and future direction."""
